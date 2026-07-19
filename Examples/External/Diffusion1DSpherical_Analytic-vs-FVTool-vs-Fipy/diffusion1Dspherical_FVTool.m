@@ -88,7 +88,7 @@ for s=[20,60,240]
   m_tot = sum(c.value(2:end-1) .* cellvol);
   n,t,m_tot
   % The following writes the result to a file
-  %  adapted from visualizeCells with domain.dimension = 1.8
+  %  adapted from visualizeCells for a spherical 1D mesh (MeshSpherical1D)
   x = [c.domain.facecenters.x(1); c.domain.cellcenters.x; c.domain.facecenters.x(end)];
   cval = [0.5*(c.value(1)+c.value(2)); c.value(2:end-1); 0.5*(c.value(end-1)+c.value(end))];
   ti += s;
