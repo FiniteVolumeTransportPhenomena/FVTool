@@ -72,6 +72,21 @@ elseif strcmp(tag, 'Cylindrical3D')
 	yvalue = (phi_face.yvalue(:,2:Ntheta+1,:)-phi_face.yvalue(:,1:Ntheta,:))./(DTHETA.*rp);
 	zvalue = (phi_face.zvalue(:,:,2:Nz+1)-phi_face.zvalue(:,:,1:Nz))./DZ;
 	cellGrad=FaceVariable(phi.domain, xvalue, yvalue, zvalue);
+elseif strcmp(tag, 'Spherical3D')
+	Nr = phi.domain.dims(1);
+	Ntheta = phi.domain.dims(2);
+	Nphi = phi.domain.dims(3);
+	DR = repmat(phi.domain.cellsize.x(2:end-1), 1, Ntheta, Nphi);
+	DTHETA = repmat(phi.domain.cellsize.y(2:end-1)', Nr, 1, Nphi);
+	DPHI = zeros(1,1,Nphi);
+	DPHI(1,1,:) = phi.domain.cellsize.z(2:end-1);
+	DPHI = repmat(DPHI, Nr, Ntheta, 1);
+	rp = repmat(phi.domain.cellcenters.x, 1, Ntheta, Nphi);
+	thetap = repmat(phi.domain.cellcenters.y', Nr, 1, Nphi);
+	xvalue = (phi_face.xvalue(2:Nr+1,:,:)-phi_face.xvalue(1:Nr,:,:))./DR;
+	yvalue = (phi_face.yvalue(:,2:Ntheta+1,:)-phi_face.yvalue(:,1:Ntheta,:))./(DTHETA.*rp);
+	zvalue = (phi_face.zvalue(:,:,2:Nphi+1)-phi_face.zvalue(:,:,1:Nphi))./(DPHI.*rp.*sin(thetap));
+	cellGrad=FaceVariable(phi.domain, xvalue, yvalue, zvalue);
 else
 	error('FVTool:unsupportedGeometry', ...
 		'gradientCellTerm: no implementation for %s', tag);
