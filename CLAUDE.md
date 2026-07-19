@@ -48,20 +48,29 @@ Every solution follows the same assembly pipeline. Understand this and the whole
 Coefficient functions take face values, so cell-centered coefficients must first be interpolated to faces with
 `harmonicMean` / `arithmeticMean` / `geometricMean` / `linearMean` / `upwindMean` / `tvdMean`.
 
-### The dimension-dispatch convention (most important internal pattern)
+### The mesh class hierarchy and geometry dispatch (most important internal pattern)
+A mesh's geometry is described by **two explicit fields** on `MeshStructure`: an integer `dimension`
+(`1|2|3`) and a string `coordsystem` (`'cartesian'|'cylindrical'|'radial'|'spherical'`). Concrete meshes are
+subclasses — `Mesh1D/Mesh2D/Mesh3D` (Cartesian) and the curvilinear `MeshCylindrical1D/2D/3D`, `MeshRadial2D`,
+`MeshSpherical1D/3D` — each set by the matching `createMesh*` function. (Historically these were encoded as a
+single floating-point `dimension` code like `2.5`/`2.8`; that is gone — do **not** compare `dimension` against
+fractional values.)
+
 User-facing functions are thin dispatchers. `diffusionTerm.m`, `convectionTerm.m`, `divergenceTerm.m`,
-`boundaryCondition.m`, etc. read `D.domain.dimension` and `switch` to a geometry-specific implementation.
-The dimension is encoded as a **fractional code**, not just the integer dimension count:
+`boundaryCondition.m`, etc. dispatch in one of two ways:
+- **Geometry-specific ops** `switch geometryTag(mesh)` — a `MeshStructure` method returning `'1D'`, `'2D'`,
+  `'Cylindrical2D'`, `'Radial2D'`, `'Spherical3D'`, etc. The tag equals the suffix of the real implementation
+  file (`diffusionTermCylindrical2D.m`, `diffusionTermSpherical1D.m`, …), and every such switch has an
+  `otherwise error('FVTool:unsupportedGeometry', ...)` so an unhandled geometry fails loudly instead of
+  returning an unset variable.
+- **Dimension-only ops** (means, reshaping, source/transient terms, `createBC`) `switch mesh.dimension` over
+  `1|2|3` — they don't care about the coordinate system.
 
-- `1` = 1D Cartesian, `1.5` = cylindrical/axisymmetric 1D, `1.8` = spherical 1D
-- `2` = 2D Cartesian, `2.5` = cylindrical 2D, `2.8` = radial 2D (r, theta)
-- `3` = 3D Cartesian, `3.2` = cylindrical 3D
-
-So `diffusionTermCylindrical2D.m`, `diffusionTermRadial2D.m`, `diffusionTermSpherical1D.m` are the real
-implementations; `diffusionTerm.m` just routes to them. **When adding or fixing a discretization, edit the
-geometry-specific `*1D/2D/3D/Cylindrical*/Radial*/Spherical*` file and make sure the dispatcher's `switch`
-covers the code.** The set of implemented geometries varies per operator — check which specific files exist
-before assuming a geometry is supported.
+**When adding or fixing a discretization, edit the geometry-specific `*1D/2D/3D/Cylindrical*/Radial*/Spherical*`
+file and make sure the dispatcher's `switch geometryTag(...)` has the matching case.** The set of implemented
+geometries varies per operator — check which specific files exist before assuming a geometry is supported. To
+add a whole new geometry, add a `MeshStructure` subclass + a `createMesh*` constructor, then add its
+`geometryTag` case to each dispatcher.
 
 ### Operator overloading
 `CellVariable`, `FaceVariable`, and `CellVector` are `classdef` types under `Classes/@.../`. Arithmetic and
@@ -72,7 +81,9 @@ of dimension.
 
 ### Directory map
 - `MeshGeneration/` — `createMesh*`, `createCellVariable`, `createFaceVariable`, `cellVolume`
-- `Classes/` — the four OO types and their operator overloads
+- `Classes/` — the OO types: `@CellVariable`/`@FaceVariable`/`@CellVector` (with operator overloads),
+  `@BoundaryCondition`, the `@MeshStructure` base (holds `dimension`/`coordsystem`/`geometryTag`), and the
+  `Mesh*` subclasses (`Mesh1D`, `MeshCylindrical2D`, `MeshSpherical3D`, …)
 - `Discretization/` — the PDE term coefficient matrices (the dispatch + geometry files above)
 - `Boundary/` — `createBC`, `boundaryCondition`, ghost-cell handling (`cellBoundary`)
 - `Calculus/` — `divergenceTerm`, `gradientTerm`, `ddtTerm` (post-processing differential operators)

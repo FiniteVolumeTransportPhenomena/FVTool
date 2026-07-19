@@ -1,16 +1,16 @@
 function MS = createMeshSpherical3D(varargin)
-% MeshStructure = createMesh3D(Nr, Ntheta, Nz, Radius, theta, height)
-% MeshStructure = createMesh3D(facelocationR, facelocationTheta, facelocationPhy)
-% creates a uniform 3D mesh:
-% Nx is the number of cells in x (horizontal) direction
-% Ny is the number of cells in y (vertical) direction
-% Nz is the number of cells in z (perpendicular) direction
-% Lx is the domain length in x direction
-% Ly is the domain length in y direction
-% Lz is the domain length in z direction
+% MeshSpherical3D = createMeshSpherical3D(Nr, Ntheta, Nphi, R, theta_max, phi_max)
+% MeshSpherical3D = createMeshSpherical3D(facelocationR, facelocationTheta, facelocationPhi)
+% creates a spherical (r, theta, phi) 3D mesh:
+% Nr is the number of cells in the r direction
+% Ntheta is the number of cells in the theta (polar angle) direction
+% Nphi is the number of cells in the phi (azimuthal angle) direction
+% R is the domain length in the r direction
+% theta_max is the domain extent in theta (<= pi)
+% phi_max is the domain extent in phi (<= 2*pi)
 %
 % SYNOPSIS:
-%   MeshStructure = createMesh3D(Nx, Ny, Nz, Lx, Ly, Lz)
+%   MeshStructure = createMeshSpherical3D(Nr, Ntheta, Nphi, R, theta_max, phi_max)
 %
 % PARAMETERS:
 %   Nx: number of cells in the x direction
