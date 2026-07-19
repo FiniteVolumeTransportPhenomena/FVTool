@@ -18,16 +18,20 @@ function phiBC = cellBoundary(phi, BC)
 %
 
 % extract data from the mesh structure
-d = BC.domain.dimension;
-
-if (d ==1) || (d==1.5) || (d==1.8)
-	phiBC = cellBoundary1D(phi, BC);
-elseif (d == 2) || (d == 2.5)
-	phiBC = cellBoundary2D(phi, BC);
-elseif (d==2.8)
-    phiBC = cellBoundaryRadial2D(phi, BC);
-elseif (d==3)
-    phiBC = cellBoundary3D(phi, BC);
-elseif (d==3.2)
-    phiBC = cellBoundaryCylindrical3D(phi, BC);
+switch geometryTag(BC.domain)
+    case {'1D', 'Cylindrical1D', 'Spherical1D'}
+        phiBC = cellBoundary1D(phi, BC);
+    case {'2D', 'Cylindrical2D'}
+        phiBC = cellBoundary2D(phi, BC);
+    case 'Radial2D'
+        phiBC = cellBoundaryRadial2D(phi, BC);
+    case '3D'
+        phiBC = cellBoundary3D(phi, BC);
+    case 'Cylindrical3D'
+        phiBC = cellBoundaryCylindrical3D(phi, BC);
+    case 'Spherical3D'
+        phiBC = cellBoundarySpherical3D(phi, BC);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'cellBoundary: no implementation for %s', geometryTag(BC.domain));
 end

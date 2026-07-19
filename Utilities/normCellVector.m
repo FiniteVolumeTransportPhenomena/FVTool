@@ -21,12 +21,12 @@ function cellnorm = normCellVector(cellvec)
 % check the size of the variable and the mesh dimension
 d = cellvec.domain.dimension;
 
-if (d ==1) || (d==1.5) || (d==1.8)
+if (d ==1)
 	cellnormval = abs(cellvec.xvalue);
-elseif (d == 2) || (d == 2.5) || (d==2.8)
+elseif (d == 2)
 	cellnormval = realsqrt(cellvec.xvalue.*cellvec.xvalue+ ...
         cellvec.yvalue.*cellvec.yvalue);
-elseif (d == 3) || (d==3.2)
+elseif (d == 3)
     cellnormval = realsqrt(cellvec.xvalue.*cellvec.xvalue+ ...
         cellvec.yvalue.*cellvec.yvalue+ ...
         cellvec.zvalue.*cellvec.zvalue);

@@ -19,7 +19,7 @@ St_S=heatCapacity_S*(T_m-T_S)/L;
 
 % calculate lambda by an approximation
 trancendalEq = @(x) St_L/(exp(x^2)*erf(x))-St_S/(nu*exp((nu^2)*x^2)*erfc(nu*x))-x*sqrt(pi);
-lambda=fzero(trancendalEq,0.3799,'notify');
+lambda=fzero(trancendalEq,0.3799,optimset('Display','notify'));
 
 X_eq=@(t) 2*lambda*sqrt(thermalDiffusivity_L*t);
 X=X_eq(time);

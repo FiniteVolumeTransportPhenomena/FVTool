@@ -20,15 +20,20 @@ function faceGrad = gradientTerm(phi)
 % Copyright (c) 2012-2016 Ali Akbar Eftekhari
 % See the license file
 
-d = phi.domain.dimension;
-if (d ==1) || (d==1.5) || (d==1.8)
-	faceGrad = gradientTerm1D(phi);
-elseif (d == 2) || (d == 2.5)
-	faceGrad = gradientTerm2D(phi);
-elseif (d==2.8)
-    faceGrad = gradientTermRadial2D(phi);
-elseif d == 3
-    faceGrad = gradientTerm3D(phi);
-elseif d == 3.2
-    faceGrad = gradientTermCylindrical3D(phi);
+switch geometryTag(phi.domain)
+    case {'1D', 'Cylindrical1D', 'Spherical1D'}
+        faceGrad = gradientTerm1D(phi);
+    case {'2D', 'Cylindrical2D'}
+        faceGrad = gradientTerm2D(phi);
+    case 'Radial2D'
+        faceGrad = gradientTermRadial2D(phi);
+    case '3D'
+        faceGrad = gradientTerm3D(phi);
+    case 'Cylindrical3D'
+        faceGrad = gradientTermCylindrical3D(phi);
+    case 'Spherical3D'
+        faceGrad = gradientTermSpherical3D(phi);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'gradientTerm: no implementation for %s', geometryTag(phi.domain));
 end

@@ -17,43 +17,52 @@ function [M, Mx, My, Mz] = convectionUpwindTerm(u, varargin)
 % SEE ALSO:
 %
 
-d = u.domain.dimension;
 if nargin>1
-    switch d
-        case 1
+    switch geometryTag(u.domain)
+        case '1D'
             M = convectionUpwindTerm1D(u, varargin{1});
-        case 1.5
+        case 'Cylindrical1D'
             M = convectionUpwindTermCylindrical1D(u, varargin{1});
-        case 1.8
+        case 'Spherical1D'
             M = convectionUpwindTermSpherical1D(u, varargin{1});
-        case 2
+        case '2D'
             [M, Mx, My] = convectionUpwindTerm2D(u, varargin{1});
-        case 2.5
+        case 'Cylindrical2D'
             [M, Mx, My] = convectionUpwindTermCylindrical2D(u, varargin{1});
-        case 2.8
+        case 'Radial2D'
             [M, Mx, My] = convectionUpwindTermRadial2D(u, varargin{1});
-        case 3
+        case '3D'
             [M, Mx, My, Mz] = convectionUpwindTerm3D(u, varargin{1});
-        case 3.2
+        case 'Cylindrical3D'
             [M, Mx, My, Mz] = convectionUpwindTermCylindrical3D(u, varargin{1});
+        case 'Spherical3D'
+            [M, Mx, My, Mz] = convectionUpwindTermSpherical3D(u, varargin{1});
+        otherwise
+            error('FVTool:unsupportedGeometry', ...
+                'convectionUpwindTerm: no implementation for %s', geometryTag(u.domain));
     end
 else
-    switch d
-        case 1
+    switch geometryTag(u.domain)
+        case '1D'
             M = convectionUpwindTerm1D(u);
-        case 1.5
+        case 'Cylindrical1D'
             M = convectionUpwindTermCylindrical1D(u);
-        case 1.8
+        case 'Spherical1D'
             M = convectionUpwindTermSpherical1D(u);
-        case 2
+        case '2D'
             [M, Mx, My] = convectionUpwindTerm2D(u);
-        case 2.5
+        case 'Cylindrical2D'
             [M, Mx, My] = convectionUpwindTermCylindrical2D(u);
-        case 2.8
+        case 'Radial2D'
             [M, Mx, My] = convectionUpwindTermRadial2D(u);
-        case 3
+        case '3D'
             [M, Mx, My, Mz] = convectionUpwindTerm3D(u);
-        case 3.2
+        case 'Cylindrical3D'
             [M, Mx, My, Mz] = convectionUpwindTermCylindrical3D(u);
+        case 'Spherical3D'
+            [M, Mx, My, Mz] = convectionUpwindTermSpherical3D(u);
+        otherwise
+            error('FVTool:unsupportedGeometry', ...
+                'convectionUpwindTerm: no implementation for %s', geometryTag(u.domain));
     end
 end

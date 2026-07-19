@@ -21,7 +21,7 @@ function [M, RHS] = transientTerm(phi_old, dt, varargin)
 %
 
 d = phi_old.domain.dimension;
-if (d ==1) || (d==1.5) || (d==1.8)
+if (d == 1)
 	% extract data from the mesh structure
     Nx = phi_old.domain.dims(1);
     G = 1:Nx+2;
@@ -42,7 +42,7 @@ if (d ==1) || (d==1.5) || (d==1.8)
 
     % assign the values of the RHS vector
     RHS(row_index) = reshape(alfa.*phi_old.value(2:Nx+1)/dt,Nx,1);
-elseif (d == 2) || (d == 2.5) || (d == 2.8)
+elseif (d == 2)
 	Nxy = phi_old.domain.dims;
     Nx = Nxy(1); Ny = Nxy(2);
     G=reshape(1:(Nx+2)*(Ny+2), Nx+2, Ny+2);
@@ -64,7 +64,7 @@ elseif (d == 2) || (d == 2.5) || (d == 2.8)
 
     % assign the values of the RHS vector
     RHS(row_index) = reshape(alfa.*phi_old.value(2:Nx+1,2:Ny+1)/dt,Nx*Ny,1);
-elseif (d == 3) || (d == 3.2)
+elseif (d == 3)
     Nxyz = phi_old.domain.dims;
     Nx = Nxyz(1); Ny = Nxyz(2); Nz = Nxyz(3);
     G=reshape(1:(Nx+2)*(Ny+2)*(Nz+2), Nx+2, Ny+2, Nz+2);

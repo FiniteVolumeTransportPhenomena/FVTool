@@ -46,13 +46,20 @@ This matlab solver is not a clone, and indeed very limited compared to FiPy.
 I wrote it to have a very handy tool for testing new ideas (new mathematical models) by solving them in 1D uniform Cartesian grids.
 Then I extended the code to
   * 1D axisymmetric (radial)
+  * 1D spherical
   * 2D radial (r, theta)
   * 2D Cartesian
   * 3D Cartesian
   * 2D axisymmetric (cylindrical, r, z)
   * 3D cylindrical (r, theta, z)
+  * 3D spherical (r, theta, phi)
 
 I have overloaded some of the matlab operators to simplify the switch from 1D codes to 2D and 3D.
+
+Each mesh geometry is its own class (`Mesh1D`, `MeshCylindrical2D`, `MeshSpherical3D`, …), all deriving from
+`MeshStructure`. A mesh carries an integer `dimension` (1/2/3) and a `coordsystem` string; use
+`strcmp(m.coordsystem, 'cylindrical')` rather than testing `m.dimension` against fractional codes (the old
+floating-point dimension codes such as `2.5`/`2.8` have been removed).
 
 ### A simple example
 You can solve a diffusion equation, i.e., $ \nabla. (-D \nabla \phi) = 0 $ by running the following code in Matlab:

@@ -24,15 +24,20 @@ function [BCMatrix, BCRHS] = boundaryCondition(BC)
 %     createMeshRadial2D, createMeshCylindrical3D,
 %     cellBoundary, combineBC, createCellVariable
 
-d = BC.domain.dimension;
-if (d ==1) || (d==1.5) || (d==1.8)
-	[BCMatrix, BCRHS] = boundaryCondition1D(BC);
-elseif (d == 2) || (d == 2.5)
-	[BCMatrix, BCRHS] = boundaryCondition2D(BC);
-elseif (d == 2.8)
-    [BCMatrix, BCRHS] = boundaryConditionRadial2D(BC);
-elseif (d == 3)
-    [BCMatrix, BCRHS] = boundaryCondition3D(BC);
-elseif (d == 3.2)
-    [BCMatrix, BCRHS] = boundaryConditionCylindrical3D(BC);
+switch geometryTag(BC.domain)
+    case {'1D', 'Cylindrical1D', 'Spherical1D'}
+        [BCMatrix, BCRHS] = boundaryCondition1D(BC);
+    case {'2D', 'Cylindrical2D'}
+        [BCMatrix, BCRHS] = boundaryCondition2D(BC);
+    case 'Radial2D'
+        [BCMatrix, BCRHS] = boundaryConditionRadial2D(BC);
+    case '3D'
+        [BCMatrix, BCRHS] = boundaryCondition3D(BC);
+    case 'Cylindrical3D'
+        [BCMatrix, BCRHS] = boundaryConditionCylindrical3D(BC);
+    case 'Spherical3D'
+        [BCMatrix, BCRHS] = boundaryConditionSpherical3D(BC);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'boundaryCondition: no implementation for %s', geometryTag(BC.domain));
 end

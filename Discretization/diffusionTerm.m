@@ -23,22 +23,26 @@ function [M, Mx, My, Mz] = diffusionTerm(D)
 %
 
 
-d = D.domain.dimension;
-switch d
-    case 1
+switch geometryTag(D.domain)
+    case '1D'
         M = diffusionTerm1D(D);
-    case 1.5
+    case 'Cylindrical1D'
         M = diffusionTermCylindrical1D(D);
-    case 1.8
+    case 'Spherical1D'
         M = diffusionTermSpherical1D(D);
-    case 2
+    case '2D'
         [M, Mx, My] = diffusionTerm2D(D);
-    case 2.5
+    case 'Cylindrical2D'
         [M, Mx, My] = diffusionTermCylindrical2D(D);
-    case 2.8
+    case 'Radial2D'
         [M, Mx, My] = diffusionTermRadial2D(D);
-    case 3
+    case '3D'
         [M, Mx, My, Mz] = diffusionTerm3D(D);
-    case 3.2
+    case 'Cylindrical3D'
         [M, Mx, My, Mz] = diffusionTermCylindrical3D(D);
+    case 'Spherical3D'
+        [M, Mx, My, Mz] = diffusionTermSpherical3D(D);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'diffusionTerm: no implementation for %s', geometryTag(D.domain));
 end

@@ -23,11 +23,11 @@ function cellvec = createCellVector(meshvar, cellval)
 d = meshvar.dimension;
 mn = meshvar.dims;
 
-if (d ==1) || (d==1.5)
+if (d ==1)
 	xvalue = cellval(1).*ones(mn(1),1);
     yvalue=[];
     zvalue=[];
-elseif (d == 2) || (d == 2.5) || (d == 2.8)
+elseif (d == 2)
     if numel(cellval)==2
         xvalue = cellval(1).*ones(mn(1), mn(2));
         yvalue = cellval(2).*ones(mn(1), mn(2));
@@ -37,7 +37,7 @@ elseif (d == 2) || (d == 2.5) || (d == 2.8)
         yvalue = cellval(1).*ones(mn(1), mn(2));
         zvalue=[];
     end
-elseif (d == 3) || (d==3.2)
+elseif (d == 3)
     if numel(cellval)==3
         xvalue = cellval(1).*ones(mn(1), mn(2), mn(3));
         yvalue = cellval(2).*ones(mn(1), mn(2), mn(3));

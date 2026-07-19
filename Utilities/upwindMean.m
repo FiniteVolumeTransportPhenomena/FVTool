@@ -24,10 +24,10 @@ function phiFaceAverage = upwindMean(phi, u)
 % extract data from the mesh structure
 
 d = phi.domain.dimension;
-if (d ==1) || (d==1.5) || (d==1.8)
+if (d ==1)
 	phiFaceAverage = upwindMean1D(phi, u);
-elseif (d == 2) || (d == 2.5) || (d==2.8)
+elseif (d == 2)
 	phiFaceAverage = upwindMean2D(phi, u);
-elseif (d == 3) || (d==3.2)
+elseif (d == 3)
     phiFaceAverage = upwindMean3D(phi, u);
 end

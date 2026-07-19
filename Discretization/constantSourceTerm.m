@@ -16,11 +16,14 @@ function RHS = constantSourceTerm(phi)
 % SEE ALSO:
 %
 
-d = phi.domain.dimension;
-if (d ==1) || (d==1.5) || (d==1.8)
-	RHS = constantSourceTerm1D(phi);
-elseif (d == 2) || (d == 2.5) || (d==2.8)
-	RHS = constantSourceTerm2D(phi);
-elseif (d==3) || (d==3.2)
-    RHS = constantSourceTerm3D(phi);
+switch phi.domain.dimension
+    case 1
+        RHS = constantSourceTerm1D(phi);
+    case 2
+        RHS = constantSourceTerm2D(phi);
+    case 3
+        RHS = constantSourceTerm3D(phi);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'constantSourceTerm: unsupported dimension %g', phi.domain.dimension);
 end

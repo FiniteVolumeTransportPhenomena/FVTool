@@ -22,11 +22,14 @@ function BC = createBC(meshvar)
 % SEE ALSO:
 %
 
-d = meshvar.dimension;
-if (d == 1) || (d==1.5) || (d==1.8)
-	BC = createBC1D(meshvar);
-elseif (d == 2) || (d == 2.5) || (d == 2.8)
-	BC = createBC2D(meshvar);
-elseif (d == 3) || (d==3.2)
-    BC = createBC3D(meshvar);
+switch meshvar.dimension
+    case 1
+        BC = createBC1D(meshvar);
+    case 2
+        BC = createBC2D(meshvar);
+    case 3
+        BC = createBC3D(meshvar);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'createBC: unsupported dimension %g', meshvar.dimension);
 end

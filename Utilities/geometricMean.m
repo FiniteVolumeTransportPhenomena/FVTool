@@ -23,12 +23,12 @@ function phiFaceAverage = geometricMean(phi)
 % extract data from the mesh structure
 
 d = phi.domain.dimension;
-if (d ==1) || (d==1.5) || (d==1.8)
+if (d ==1)
     dx = phi.domain.cellsize.x;
     xvalue=exp((dx(1:end-1).*log(phi.value(1:end-1))+dx(2:end).*log(phi.value(2:end)))./(dx(2:end)+dx(1:end-1)));
     yvalue=[];
     zvalue=[];
-elseif (d == 2) || (d == 2.5) || (d == 2.8)
+elseif (d == 2)
     Nx = phi.domain.dims(1);
     Ny = phi.domain.dims(2);
     dx = repmat(phi.domain.cellsize.x, 1, Ny);
@@ -38,7 +38,7 @@ elseif (d == 2) || (d == 2.5) || (d == 2.8)
     yvalue=exp((dy(:,1:end-1).*log(phi.value(2:end-1,1:end-1))+...
         dy(:,2:end).*log(phi.value(2:end-1,2:end)))./(dy(:,2:end)+dy(:,1:end-1)));
     zvalue=[];
-elseif (d == 3) || (d==3.2)
+elseif (d == 3)
     Nx = phi.domain.dims(1);
     Ny = phi.domain.dims(2);
     Nz = phi.domain.dims(3);

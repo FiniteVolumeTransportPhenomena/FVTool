@@ -72,4 +72,4 @@ elseif nargin==2
   end
   MS=createMesh2D(facelocationX, facelocationY);
 end
-MS.dimension=2.8;
+MS=MeshRadial2D(MS.dims, MS.cellsize, MS.cellcenters, MS.facecenters, MS.corners, MS.edges);
