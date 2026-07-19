@@ -21,10 +21,10 @@ function ddt = ddtTerm(phi, phi_old, dt, BC)
 
 
 d = phi.domain.dimension;
-if (d ==1) || (d==1.5) || (d==1.8)
+if (d == 1)
 	ddt = createCellVariable(phi.domain, (phi.value(2:end-1)-phi_old.value(2:end-1))/dt, BC);
-elseif (d == 2) || (d == 2.5) || (d==2.8)
+elseif (d == 2)
 	ddt = createCellVariable(phi.domain, (phi.value(2:end-1, 2:end-1)-phi_old.value(2:end-1, 2:end-1))/dt, BC);
-elseif (d == 3) || (d==3.2)
+elseif (d == 3)
     ddt = createCellVariable(phi.domain, (phi.value(2:end-1, 2:end-1, 2:end-1)-phi_old.value(2:end-1, 2:end-1, 2:end-1))/dt, BC);
 end

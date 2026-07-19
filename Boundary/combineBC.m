@@ -20,12 +20,14 @@ function [Mout, RHSout] = combineBC(BC, Meq, RHSeq)
 %
 
 
-d = BC.domain.dimension;
-
-if (d ==1) || (d==1.5)
-	[Mout, RHSout] = combineBC1D(BC, Meq, RHSeq);
-elseif (d == 2) || (d == 2.5)
-	[Mout, RHSout] = combineBC2D(BC, Meq, RHSeq);
-elseif d == 3
-    [Mout, RHSout] = combineBC3D(BC, Meq, RHSeq);
+switch BC.domain.dimension
+    case 1
+        [Mout, RHSout] = combineBC1D(BC, Meq, RHSeq);
+    case 2
+        [Mout, RHSout] = combineBC2D(BC, Meq, RHSeq);
+    case 3
+        [Mout, RHSout] = combineBC3D(BC, Meq, RHSeq);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'combineBC: unsupported dimension %g', BC.domain.dimension);
 end

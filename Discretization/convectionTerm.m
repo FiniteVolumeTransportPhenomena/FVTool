@@ -17,22 +17,26 @@ function [M, Mx, My, Mz] = convectionTerm(u)
 % SEE ALSO:
 %
 
-d = u.domain.dimension;
-switch d
-    case 1
+switch geometryTag(u.domain)
+    case '1D'
     	M = convectionTerm1D(u);
-    case 1.5
+    case 'Cylindrical1D'
         M = convectionTermCylindrical1D(u);
-    case 1.8
+    case 'Spherical1D'
         M = convectionTermSpherical1D(u);
-    case 2
+    case '2D'
         [M, Mx, My] = convectionTerm2D(u);
-    case 2.5
+    case 'Cylindrical2D'
         [M, Mx, My] = convectionTermCylindrical2D(u);
-    case 2.8
+    case 'Radial2D'
         [M, Mx, My] = convectionTermRadial2D(u);
-    case 3
+    case '3D'
         [M, Mx, My, Mz] = convectionTerm3D(u);
-    case 3.2
+    case 'Cylindrical3D'
         [M, Mx, My, Mz] = convectionTermCylindrical3D(u);
+    case 'Spherical3D'
+        [M, Mx, My, Mz] = convectionTermSpherical3D(u);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'convectionTerm: no implementation for %s', geometryTag(u.domain));
 end

@@ -19,24 +19,29 @@ function [RHS, RHSx, RHSy, RHSz] = convectionTvdRHS(u, phi, FL)
 % SEE ALSO:
 %
 
-d = u.domain.dimension;
-switch d
-    case 1
+switch geometryTag(u.domain)
+    case '1D'
         RHS = convectionTvdRHS1D(u, phi, FL);
-    case 1.5
+    case 'Cylindrical1D'
         RHS = convectionTvdRHSCylindrical1D(u, phi, FL);
-    case 1.8
+    case 'Spherical1D'
         RHS = convectionTvdRHSSpherical1D(u, phi, FL);
-    case 2
+    case '2D'
         [RHS, RHSx, RHSy] = convectionTvdRHS2D(u, phi, FL);
-    case 2.5
+    case 'Cylindrical2D'
         [RHS, RHSx, RHSy] = convectionTvdRHSCylindrical2D(u, phi, FL);
-    case 2.8
+    case 'Radial2D'
         [RHS, RHSx, RHSy] = ...
             convectionTvdRHSRadial2D(u, phi, FL);
-    case 3
+    case '3D'
         [RHS, RHSx, RHSy, RHSz] = convectionTvdRHS3D(u, phi, FL);
-    case 3.2
+    case 'Cylindrical3D'
         [RHS, RHSx, RHSy, RHSz] = ...
             convectionTvdRHSCylindrical3D(u, phi, FL);
+    case 'Spherical3D'
+        [RHS, RHSx, RHSy, RHSz] = ...
+            convectionTvdRHSSpherical3D(u, phi, FL);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'convectionTvdRHS: no implementation for %s', geometryTag(u.domain));
 end

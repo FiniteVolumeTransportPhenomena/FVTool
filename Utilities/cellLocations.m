@@ -27,12 +27,12 @@ Y= createCellVariable(m, 0);
 Z= createCellVariable(m, 0);
 d = m.dimension;
 switch d
-case {1, 1.5, 1.8}
+case 1
     	X=createCellVariable(m, m.cellcenters.x);
-    case {2, 2.5, 2.8}
+    case 2
         X= createCellVariable(m, repmat(m.cellcenters.x, 1, N(2)));
         Y= createCellVariable(m, repmat(m.cellcenters.y', N(1), 1));
-    case {3, 3.2}
+    case 3
         X= createCellVariable(m, repmat(m.cellcenters.x, 1, N(2), N(3)));
         Y= createCellVariable(m, repmat(m.cellcenters.y', N(1), 1, N(3)));
         z=zeros(1,1,N(3));

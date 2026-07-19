@@ -18,22 +18,26 @@ function [RHSdiv, RHSdivx, RHSdivy, RHSdivz] = divergenceTerm(F)
 
 RHSdivz=[];
 
-d = F.domain.dimension;
-switch d
-    case 1
+switch geometryTag(F.domain)
+    case '1D'
         RHSdiv = divergenceTerm1D(F);
-    case 1.5
+    case 'Cylindrical1D'
         RHSdiv = divergenceTermCylindrical1D(F);
-    case 1.8
+    case 'Spherical1D'
         RHSdiv = divergenceTermSpherical1D(F);
-    case 2
+    case '2D'
         [RHSdiv, RHSdivx, RHSdivy] = divergenceTerm2D(F);
-    case 2.5
+    case 'Cylindrical2D'
         [RHSdiv, RHSdivx, RHSdivy] = divergenceTermCylindrical2D(F);
-    case 2.8
+    case 'Radial2D'
         [RHSdiv, RHSdivx, RHSdivy] = divergenceTermRadial2D(F);
-    case 3
+    case '3D'
         [RHSdiv, RHSdivx, RHSdivy, RHSdivz] = divergenceTerm3D(F);
-    case 3.2
+    case 'Cylindrical3D'
         [RHSdiv, RHSdivx, RHSdivy, RHSdivz] = divergenceTermCylindrical3D(F);
+    case 'Spherical3D'
+        [RHSdiv, RHSdivx, RHSdivy, RHSdivz] = divergenceTermSpherical3D(F);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'divergenceTerm: no implementation for %s', geometryTag(F.domain));
 end

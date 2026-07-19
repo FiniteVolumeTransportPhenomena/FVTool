@@ -25,18 +25,20 @@ function cellvol = cellVolume(meshvar)
 % check the size of the variable and the mesh dimension
 dim = meshvar.dimension;
 BC = createBC(meshvar);
-switch dim
-    case 1
+switch geometryTag(meshvar)
+    case '1D'
         c=meshvar.cellsize.x(2:end-1);
-    case 1.5
+    case 'Cylindrical1D'
         c=2.0*pi()*meshvar.cellsize.x(2:end-1).*meshvar.cellcenters.x;
-    case 2
+    case 'Spherical1D'
+        c=4.0*pi()*meshvar.cellcenters.x.^2.*meshvar.cellsize.x(2:end-1);
+    case '2D'
         c=meshvar.cellsize.x(2:end-1)*meshvar.cellsize.y(2:end-1)';
-    case 2.5 % cylindrical
+    case 'Cylindrical2D' % cylindrical
         c=2.0*pi()*meshvar.cellcenters.x.*meshvar.cellsize.x(2:end-1)*meshvar.cellsize.y(2:end-1)';
-    case 2.8 % radial
+    case 'Radial2D' % radial
         c=meshvar.cellcenters.x.*meshvar.cellsize.x(2:end-1)*meshvar.cellsize.y(2:end-1)';
-    case 3
+    case '3D'
         Nx = meshvar.dims(1);
         Ny = meshvar.dims(2);
         Nz = meshvar.dims(3);
@@ -46,7 +48,7 @@ switch dim
         DZ(1,1,:) = meshvar.cellsize.z;
         DZp=repmat(DZ(1,1,2:end-1), Nx, Ny, 1);
         c=DXp.*DYp.*DZp;
-    case 3.2
+    case 'Cylindrical3D'
         N = meshvar.dims;
         Nr = N(1); Ntetta=N(2); Nz = N(3);
         rp = repmat(meshvar.cellcenters.x, 1, Ntetta, Nz);
@@ -56,5 +58,19 @@ switch dim
         DZ(1,1,:) = meshvar.cellsize.z;
         DZp=repmat(DZ(1,1,2:end-1), Nr, Ntetta, 1);
         c=rp.*DRp.*DTHETAp.*DZp;
+    case 'Spherical3D'
+        N = meshvar.dims;
+        Nr = N(1); Ntheta=N(2); Nphi = N(3);
+        rp = repmat(meshvar.cellcenters.x, 1, Ntheta, Nphi);
+        THETAp = repmat(meshvar.cellcenters.y', Nr, 1, Nphi);
+        DRp = repmat(meshvar.cellsize.x(2:end-1), 1, Ntheta, Nphi);
+        DTHETAp = repmat(meshvar.cellsize.y(2:end-1)', Nr, 1, Nphi);
+        DPHI = zeros(1,1,Nphi+2);
+        DPHI(1,1,:) = meshvar.cellsize.z;
+        DPHIp = repmat(DPHI(1,1,2:end-1), Nr, Ntheta, 1);
+        c=rp.^2.*sin(THETAp).*DRp.*DTHETAp.*DPHIp;
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'cellVolume: no implementation for %s', geometryTag(meshvar));
 end
 cellvol= createCellVariable(meshvar, c, BC);

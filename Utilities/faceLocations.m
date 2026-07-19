@@ -26,14 +26,14 @@ Z=createFaceVariable(m, 0);
 N=m.dims;
 d = m.dimension;
 switch d
-case {1, 1.5, 1.8}
+case 1
     	X.xvalue= m.facecenters.x;
-    case {2, 2.5, 2.8}
+    case 2
         X.xvalue= repmat(m.facecenters.x, 1, N(2));
         X.yvalue= repmat(m.cellcenters.y', N(1)+1, 1);
         Y.xvalue= repmat(m.cellcenters.x, 1, N(2)+1);
         Y.yvalue= repmat(m.facecenters.y', N(1), 1);
-    case {3, 3.2}
+    case 3
         X.xvalue= repmat(m.facecenters.x, 1, N(2), N(3));
         X.yvalue= repmat(m.cellcenters.y', N(1)+1, 1, N(3));
         z=zeros(1,1,N(3));

@@ -85,4 +85,4 @@ elseif nargin==3
   end
   MS=createMesh3D(facelocationX,facelocationTheta,facelocationZ);
 end
-MS.dimension=3.2;
+MS=MeshCylindrical3D(MS.dims, MS.cellsize, MS.cellcenters, MS.facecenters, MS.corners, MS.edges);

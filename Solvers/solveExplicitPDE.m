@@ -39,11 +39,11 @@ else
     phi_val = reshape(x, [N(1)+2 1]);
 end
 
-if (d ==1) || (d==1.5)
+if (d == 1)
 	phi_val = phi_val(2:N(1)+1);
-elseif (d == 2) || (d == 2.5) || (d==2.8)
+elseif (d == 2)
 	phi_val = phi_val(2:N(1)+1, 2:N(2)+1);
-elseif (d == 3) || (d==3.2)
+elseif (d == 3)
     phi_val = phi_val(2:N(1)+1, 2:N(2)+1, 2:N(3)+1);
 end
 

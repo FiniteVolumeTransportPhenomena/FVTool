@@ -25,10 +25,10 @@ function cellvar = reshapeInternalCell(MS, phi)
 d = MS.dimension;
 N = MS.dims;
 
-if (d ==1) || (d==1.5) || (d==1.8)
+if (d ==1)
 	cellvar = reshape(phi, N(1), 1);
-elseif (d == 2) || (d == 2.5) || (d==2.8)
+elseif (d == 2)
 	cellvar = reshape(phi, N(1), N(2));
-elseif (d == 3) || (d==3.2)
+elseif (d == 3)
     cellvar = reshape(phi, N(1), N(2), N(3));
 end

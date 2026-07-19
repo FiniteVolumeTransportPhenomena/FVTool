@@ -93,4 +93,4 @@ elseif nargin==3
   end
   MS=createMesh3D(facelocationX,facelocationTheta,facelocationPhy);
 end
-MS.dimension=3.5;
+MS=MeshSpherical3D(MS.dims, MS.cellsize, MS.cellcenters, MS.facecenters, MS.corners, MS.edges);

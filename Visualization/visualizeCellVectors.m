@@ -18,22 +18,20 @@ function visualizeCellVectors(phi_cell)
 % Written by Ali A. Eftekhari
 % See the license file
 
-d = phi_cell.domain.dimension;
-switch d
-    case 1
+switch geometryTag(phi_cell.domain)
+    case {'1D', 'Cylindrical1D', 'Spherical1D'}
         warning('No vector visualization for a 1D domain.');
-    case 1.5
-        warning('No vector visualization for a 1D domain.');
-    case 2
+    case {'2D', 'Cylindrical2D'}
         visualizeCellVectors2D(phi_cell);
-    case 2.5
-        visualizeCellVectors2D(phi_cell);
-    case 2.8
+    case 'Radial2D'
         visualizeCellVectorsRadial2D(phi_cell);
-    case 3
+    case '3D'
         visualizeCellVectors3D(phi_cell);
-    case 3.2
+    case 'Cylindrical3D'
         visualizeCellVectorsCylindrical3D(phi_cell);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'visualizeCellVectors: no implementation for %s', geometryTag(phi_cell.domain));
 end
 
 end

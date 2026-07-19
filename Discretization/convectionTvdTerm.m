@@ -20,24 +20,29 @@ function [M, RHS, Mx, My, Mz, RHSx, RHSy, RHSz] = convectionTvdTerm(u, phi, FL)
 %
 
 Mz=[];
-d = u.domain.dimension;
-switch d
-    case 1
+switch geometryTag(u.domain)
+    case '1D'
         [M, RHS] = convectionTvdTerm1D(u, phi, FL);
-    case 1.5
+    case 'Cylindrical1D'
         [M, RHS] = convectionTvdTermCylindrical1D(u, phi, FL);
-    case 1.8
+    case 'Spherical1D'
         [M, RHS] = convectionTvdTermSpherical1D(u, phi, FL);
-    case 2
+    case '2D'
         [M, RHS, Mx, My, RHSx, RHSy] = convectionTvdTerm2D(u, phi, FL);
-    case 2.5
+    case 'Cylindrical2D'
         [M, RHS, Mx, My, RHSx, RHSy] = convectionTvdTermCylindrical2D(u, phi, FL);
-    case 2.8
+    case 'Radial2D'
         [M, RHS, Mx, My, RHSx, RHSy] = ...
             convectionTvdTermRadial2D(u, phi, FL);
-    case 3
+    case '3D'
         [M, RHS, Mx, My, Mz, RHSx, RHSy, RHSz] = convectionTvdTerm3D(u, phi, FL);
-    case 3.2
+    case 'Cylindrical3D'
         [M, RHS, Mx, My, Mz, RHSx, RHSy, RHSz] = ...
             convectionTvdTermCylindrical3D(u, phi, FL);
+    case 'Spherical3D'
+        [M, RHS, Mx, My, Mz, RHSx, RHSy, RHSz] = ...
+            convectionTvdTermSpherical3D(u, phi, FL);
+    otherwise
+        error('FVTool:unsupportedGeometry', ...
+            'convectionTvdTerm: no implementation for %s', geometryTag(u.domain));
 end
